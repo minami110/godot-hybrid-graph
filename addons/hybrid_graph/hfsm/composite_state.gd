@@ -59,7 +59,7 @@ func __get_or_create_state(template: GDScript) -> _HgNode:
 	var new_state = template.new() as _HgNode
 	assert(new_state != null, "The template is not extended _HgNode class.")
 
-	new_state.__on_initialize_core(__blackboard, self)
+	new_state.__on_init_core(__blackboard, self)
 	__children.push_back(new_state)
 
 	return new_state
@@ -87,9 +87,9 @@ func __has_node(node: _HgNode, recursive := true) -> bool:
 
 #region _HgNode
 
-func __dispose() -> void:
+func __on_dispose_core() -> void:
 	for child in __children:
-		child.__dispose()
+		child.__on_dispose_core()
 
 	_on_dispose()
 
@@ -111,7 +111,7 @@ func __connect(trigger: Variant, next_node: _HgNode) -> void:
 		child.__connect(trigger, next_node)
 
 @warning_ignore("unused_parameter")
-func __on_initialize_core(in_blackboard: Variant, parent: _HgContainerNode) -> void:
+func __on_init_core(in_blackboard: Variant, parent: _HgContainerNode) -> void:
 	assert(not __is_initialized, "The state is already initialized.")
 
 	# Setup blackboard and initial state

@@ -66,7 +66,7 @@ func __try_get_next_node_with_condition() -> _HgLeafNode:
 
 #region _HgNode implementations
 
-func __dispose() -> void:
+func __on_dispose_core() -> void:
 	_on_dispose()
 
 	__parent = null
@@ -98,7 +98,7 @@ func __connect(trigger: Variant, next_node: _HgNode) -> void:
 	assert(__transition_table_with_trigger.has(trigger) == false, "The trigger is already connected: %s" % trigger)
 	__transition_table_with_trigger[trigger] = next_node
 
-func __on_initialize_core(in_blackboard: Variant, parent: _HgContainerNode) -> void:
+func __on_init_core(in_blackboard: Variant, parent: _HgContainerNode) -> void:
 	__blackboard = in_blackboard
 	__parent = parent
 	_on_init()

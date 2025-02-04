@@ -21,7 +21,7 @@ var __next_node: _HgLeafNode
 ## Do not call this constructor directly.
 func _init(container: _HgContainerNode, blackboard: Variant) -> void:
 	__container = container
-	__container.__on_initialize_core(blackboard, null)
+	__container.__on_init_core(blackboard, null)
 	__current_node = __container.__get_entry_node()
 
 	__is_running = false
@@ -31,7 +31,7 @@ func _init(container: _HgContainerNode, blackboard: Variant) -> void:
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_PREDELETE:
 		if __container:
-			__container.__dispose()
+			__container.__on_dispose_core()
 			__is_running = false
 			__container = null
 			__current_node = null
@@ -101,7 +101,7 @@ func send_trigger(trigger: Variant) -> bool:
 func dispose() -> void:
 	assert(__container, "HybridGraph is disposed.")
 
-	__container.__dispose()
+	__container.__on_dispose_core()
 	__is_running = false
 	__container = null
 	__current_node = null
