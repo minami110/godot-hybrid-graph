@@ -1,6 +1,8 @@
 class_name _HgNode extends RefCounted
 ## Base class for all nodes in the HybridGraph.
 
+func __dispose() -> void:
+	pass
 
 func __get_entry_node() -> _HgLeafNode:
 	return null

@@ -69,6 +69,8 @@ func test_standard_1() -> void:
 	graph.execute()
 	assert_array(blackboard).is_equal(["P", "A", "X", "B", "1", "3"])
 
+	graph.dispose()
+
 class Invalid1 extends HgCompositeState:
 	pass
 

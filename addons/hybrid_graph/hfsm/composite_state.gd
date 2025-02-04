@@ -10,12 +10,12 @@ var __children: Array[_HgNode]
 
 #region Public methods
 
-## Get the blackboard.
+## Get the blackboard
 var blackboard: Variant:
 	get:
 		return __blackboard
 
-## Add a transition with a trigger.
+## Add a transition
 func add_transition(from: GDScript, to: GDScript, trigger: Variant) -> void:
 	assert(__is_initialized == false, "The state is already initialized.")
 	assert(trigger != null, "The trigger is null.")
@@ -25,12 +25,12 @@ func add_transition(from: GDScript, to: GDScript, trigger: Variant) -> void:
 	prev_state.__connect(trigger, next_state)
 
 
-## Make a transition
+## Define state transitions
 func _define_transitions() -> GDScript:
 	return null
 
 ## Called when the state is initialized.
-func _on_initialize() -> void:
+func _on_init() -> void:
 	pass
 
 ## Called when the state is entered.
@@ -45,7 +45,8 @@ func _on_execute() -> void:
 func _on_exit() -> void:
 	pass
 
-func _on_destroy() -> void:
+## Called when the state is disposed.
+func _on_dispose() -> void:
 	pass
 
 #endregion
@@ -81,12 +82,25 @@ func __has_node(node: _HgNode, recursive := true) -> bool:
 
 	return false
 
-func dispose() -> void:
-	pass
 
 #endregion
 
 #region _HgNode
+
+func __dispose() -> void:
+	for child in __children:
+		child.__dispose()
+
+	__parent = null
+	__initial_state = null
+
+	# NOTE: read-only なので上書きで参照を消す
+	__children = []
+
+	_on_dispose()
+
+	# NOTE: blackboard は on_destroy 内でアクセスされる可能性があるので最後に消す
+	__blackboard = null
 
 func __get_entry_node() -> _HgLeafNode:
 	assert(__initial_state != null, "The initial state is not set.")
@@ -117,7 +131,7 @@ func __on_initialize_core(in_blackboard: Variant, parent: _HgContainerNode) -> v
 	assert(__initial_state != null, "The initial state is not set.")
 
 	# Initialize the initial state
-	_on_initialize()
+	_on_init()
 
 	# Make read-only children
 	__is_initialized = true

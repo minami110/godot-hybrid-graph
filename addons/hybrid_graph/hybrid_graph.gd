@@ -12,11 +12,11 @@ static func create(template: GDScript, blackboard: Variant) -> HybridGraph:
 
 
 var __is_running: bool
-var __is_disposed: bool
 
 var __container: _HgContainerNode
 var __current_node: _HgLeafNode
 var __next_node: _HgLeafNode
+
 
 ## Do not call this constructor directly.
 func _init(container: _HgContainerNode, blackboard: Variant) -> void:
@@ -25,15 +25,20 @@ func _init(container: _HgContainerNode, blackboard: Variant) -> void:
 	__current_node = __container.__get_entry_node()
 
 	__is_running = false
-	__is_disposed = false
 	__next_node = null
+
+## Destructor
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_PREDELETE:
+		dispose()
+		pass
 
 
 #region Public methods
 
 ##
 func execute() -> void:
-	assert(not __is_disposed, "HybridGraph is disposed.")
+	assert(__container, "HybridGraph is disposed.")
 
 	var is_skipped_on_enter_with_cond := false
 	if not __is_running:
@@ -74,7 +79,7 @@ func execute() -> void:
 
 ##
 func send_trigger(trigger: Variant) -> bool:
-	assert(not __is_disposed, "HybridGraph is disposed.")
+	assert(__container, "HybridGraph is disposed.")
 	assert(__is_running, "HybridGraph is not running.")
 	assert(trigger != null, "The trigger is null.")
 	assert(trigger is not Callable, "The trigger is Callable.")
@@ -90,11 +95,15 @@ func send_trigger(trigger: Variant) -> bool:
 
 ##
 func dispose() -> void:
-	assert(not __is_disposed, "HybridGraph is disposed.")
+	assert(__container, "HybridGraph is disposed.")
 
-	__is_disposed = true
 	__is_running = false
+
 	__container.dispose()
+
+	__container = null
+	__current_node = null
+	__next_node = null
 
 #endregion
 

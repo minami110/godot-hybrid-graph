@@ -16,24 +16,29 @@ var __parent: _HgContainerNode
 
 #region Public methods
 
-## Get the blackboard.
+## Get the blackboard
 var blackboard: Variant:
 	get:
 		return __blackboard
 
-func _on_initialize() -> void:
+## Called when the state is initialized.
+func _on_init() -> void:
 	pass
 
+## Called when the state is entered.
 func _on_enter() -> void:
 	pass
 
+## Called when the state is executed.
 func _on_execute() -> void:
 	pass
 
+## Called when the state is exited.
 func _on_exit() -> void:
 	pass
 
-func _on_destroy() -> void:
+## Called when the state is disposed.
+func _on_dispose() -> void:
 	pass
 
 #endregion
@@ -61,6 +66,18 @@ func __try_get_next_node_with_condition() -> _HgLeafNode:
 
 #region _HgNode implementations
 
+func __dispose() -> void:
+	__parent = null
+
+	# NOTE: read-only なので上書きで参照を消す
+	__transition_table_with_trigger = {}
+	__transition_table_with_callable = {}
+
+	_on_dispose()
+
+	# NOTE: blackboard は on_destroy 内でアクセスされる可能性があるので最後に消す
+	__blackboard = null
+
 func __get_entry_node() -> _HgLeafNode:
 	return self
 
@@ -84,7 +101,7 @@ func __connect(trigger: Variant, next_node: _HgNode) -> void:
 func __on_initialize_core(in_blackboard: Variant, parent: _HgContainerNode) -> void:
 	__blackboard = in_blackboard
 	__parent = parent
-	_on_initialize()
+	_on_init()
 
 func __on_enter_core() -> void:
 	if __parent != null:
