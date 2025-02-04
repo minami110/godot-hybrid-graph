@@ -99,7 +99,7 @@ func dispose() -> void:
 
 	__is_running = false
 
-	__container.dispose()
+	__container.__dispose()
 
 	__container = null
 	__current_node = null
