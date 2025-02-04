@@ -30,8 +30,12 @@ func _init(container: _HgContainerNode, blackboard: Variant) -> void:
 ## Destructor
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_PREDELETE:
-		dispose()
-		pass
+		if __container:
+			__container.__dispose()
+			__is_running = false
+			__container = null
+			__current_node = null
+			__next_node = null
 
 
 #region Public methods
@@ -97,10 +101,8 @@ func send_trigger(trigger: Variant) -> bool:
 func dispose() -> void:
 	assert(__container, "HybridGraph is disposed.")
 
-	__is_running = false
-
 	__container.__dispose()
-
+	__is_running = false
 	__container = null
 	__current_node = null
 	__next_node = null
