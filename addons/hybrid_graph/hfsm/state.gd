@@ -67,13 +67,13 @@ func __try_get_next_node_with_condition() -> _HgLeafNode:
 #region _HgNode implementations
 
 func __dispose() -> void:
+	_on_dispose()
+
 	__parent = null
 
 	# NOTE: read-only なので上書きで参照を消す
 	__transition_table_with_trigger = {}
 	__transition_table_with_callable = {}
-
-	_on_dispose()
 
 	# NOTE: blackboard は on_destroy 内でアクセスされる可能性があるので最後に消す
 	__blackboard = null

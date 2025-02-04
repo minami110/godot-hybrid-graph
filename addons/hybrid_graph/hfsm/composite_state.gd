@@ -91,13 +91,13 @@ func __dispose() -> void:
 	for child in __children:
 		child.__dispose()
 
+	_on_dispose()
+
 	__parent = null
 	__initial_state = null
 
 	# NOTE: read-only なので上書きで参照を消す
 	__children = []
-
-	_on_dispose()
 
 	# NOTE: blackboard は on_destroy 内でアクセスされる可能性があるので最後に消す
 	__blackboard = null
