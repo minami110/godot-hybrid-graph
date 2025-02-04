@@ -11,9 +11,12 @@ config_version=5
 [application]
 
 config/name="godot-hybrid-graph"
-config/features=PackedStringArray("4.3", "GL Compatibility")
-config/icon="res://icon.svg"
 config/tags=PackedStringArray("dev")
+config/features=PackedStringArray("4.3", "GL Compatibility")
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/gdUnit4/plugin.cfg", "res://addons/hybrid_graph/plugin.cfg")
 
 [rendering]
 
