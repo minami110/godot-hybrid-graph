@@ -3,7 +3,7 @@ extends GdUnitTestSuite
 
 class CompositeStateA extends HgCompositeState:
 	func _define_transitions():
-		add_transition(StateA, StateB, "AtoB")
+		add_transition(StateA, StateB, &"AtoB")
 		add_transition(StateB, StateA, 2)
 		return StateA
 
